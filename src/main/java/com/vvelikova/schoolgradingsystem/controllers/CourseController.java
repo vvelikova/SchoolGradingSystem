@@ -71,4 +71,9 @@ public class CourseController {
         courseService.deleteCourseById(course_id);
         return  new ResponseEntity<String>("Course with ID: " + course_id + " is successfully deleted.", HttpStatus.OK);
     }
+
+    @GetMapping("{/all}")
+    public Iterable<Course> getAllCourses() {
+        return courseService.findAllCourses();
+    }
 }

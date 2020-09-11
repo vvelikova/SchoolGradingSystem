@@ -38,4 +38,9 @@ public class CourseService {
     public void deleteCourseById (Long id) {
         courseRepository.delete(getCourseById(id));
     }
+
+    public Iterable<Course> findAllCourses() {
+        return courseRepository.findAll();
+
+    }
 }
