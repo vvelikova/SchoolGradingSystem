@@ -62,7 +62,7 @@ public class StudentController {
     public ResponseEntity<?> deleteStudentById (@PathVariable Long student_id) {
         studentService.deleteStudentById(student_id);
 
-        return new ResponseEntity<String>("Project with ID: " + student_id + " is successfully deleted.", HttpStatus.OK);
+        return new ResponseEntity<String>("Student with ID: " + student_id + " is successfully deleted.", HttpStatus.OK);
     }
 
     @ExceptionHandler
