@@ -59,10 +59,15 @@ public class StudentController {
     }
 
     @DeleteMapping("{student_id}")
-    public ResponseEntity<?> deleteStudentById (@PathVariable Long student_id) {
+    public ResponseEntity<?> deleteStudentById(@PathVariable Long student_id) {
         studentService.deleteStudentById(student_id);
 
         return new ResponseEntity<String>("Student with ID: " + student_id + " is successfully deleted.", HttpStatus.OK);
+    }
+
+    @GetMapping("{all}")
+    public Iterable<Student> getAllStudents() {
+        return studentService.findAllStudents();
     }
 
     @ExceptionHandler
