@@ -45,13 +45,6 @@ public class StudentController {
     @GetMapping("{student_id}")
     public ResponseEntity<?> getStudentById(@PathVariable Long student_id) {
 
-//        Student student;
-//        try {
-//            student = studentService.getStudentById(student_id);
-//        } catch (Exception exc) {
-//            throw new StudentNotFoundException(exc.getMessage());
-//        }
-
         Student student = studentService.getStudentById(student_id);
 
         return new ResponseEntity<>(student, HttpStatus.OK);

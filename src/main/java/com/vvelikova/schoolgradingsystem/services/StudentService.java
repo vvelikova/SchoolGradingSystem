@@ -29,7 +29,7 @@ public class StudentService {
         Student existingStudent = studentRepository.getById(id);
 
         if (existingStudent == null) {
-            throw new StudentNotFoundException("Student with ID: " + id + " does NOT exist in the system.");
+            throw new StudentNotFoundException("Student with ID " + id + " does NOT exist in the system.");
         }
 
         return existingStudent;
