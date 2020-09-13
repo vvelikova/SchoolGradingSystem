@@ -29,7 +29,7 @@ public class CourseService {
         Course existingCourse = courseRepository.getById(id);
 
         if (existingCourse == null) {
-            throw new CourseNotFoundException("Course with ID: " + id + " does NOT exist in the system.");
+            throw new CourseNotFoundException("Course with ID " + id + " does NOT exist in the system.");
         }
 
         return existingCourse;
