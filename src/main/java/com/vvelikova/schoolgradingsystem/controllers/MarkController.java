@@ -1,6 +1,8 @@
 package com.vvelikova.schoolgradingsystem.controllers;
 
 import com.vvelikova.schoolgradingsystem.domain.Mark;
+import com.vvelikova.schoolgradingsystem.exceptions.MarkErrorResponse;
+import com.vvelikova.schoolgradingsystem.exceptions.MarkNotFoundExceptoin;
 import com.vvelikova.schoolgradingsystem.exceptions.StudentErrorResponse;
 import com.vvelikova.schoolgradingsystem.exceptions.StudentNotFoundException;
 import com.vvelikova.schoolgradingsystem.services.MarkService;
@@ -63,9 +65,26 @@ public class MarkController {
         return new ResponseEntity<String>("Average grade for student with ID " + student_id + " across all courses is " + df.format(avg), HttpStatus.OK);
     }
 
+    @DeleteMapping("/{mark_id}")
+    public ResponseEntity<?> deleteMarkById(@PathVariable Long mark_id) {
+        markService.deleteMarkById(mark_id);
+
+        return new ResponseEntity<String>("Mark with ID " + mark_id + " is successfully deleted.", HttpStatus.OK);
+    }
+
     @ExceptionHandler
     public ResponseEntity<StudentErrorResponse> handleException(StudentNotFoundException exc) {
         StudentErrorResponse error = new StudentErrorResponse();
+        error.setStatus(HttpStatus.NOT_FOUND.value());
+        error.setMessage(exc.getMessage());
+        error.setTimestamp(System.currentTimeMillis());
+
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<MarkErrorResponse> handleException (MarkNotFoundExceptoin exc) {
+        MarkErrorResponse error = new MarkErrorResponse();
         error.setStatus(HttpStatus.NOT_FOUND.value());
         error.setMessage(exc.getMessage());
         error.setTimestamp(System.currentTimeMillis());

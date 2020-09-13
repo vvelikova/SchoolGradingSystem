@@ -10,6 +10,8 @@ public interface MarkRepository extends CrudRepository<Mark, Long> {
 
     List<Mark> findByStudentId(Long id);
 
+    Mark getById(Long id);
+
     @Override
     Iterable<Mark> findAll();
 
