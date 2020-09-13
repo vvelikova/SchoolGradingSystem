@@ -43,26 +43,20 @@ public class CourseController {
         return new ResponseEntity<>(course, HttpStatus.CREATED);
     }
 
-    @GetMapping("{course_id}")
+    @GetMapping("/{course_id}")
     public ResponseEntity<?> getCourseById(@PathVariable Long course_id) {
-        Course course;
-
-        try {
-            course = courseService.getCourseById(course_id);
-        } catch (Exception exc) {
-            throw new CourseNotFoundException(exc.getMessage());
-        }
+        Course course = courseService.getCourseById(course_id);
 
         return new ResponseEntity<>(course, HttpStatus.OK);
     }
 
-    @DeleteMapping("{course_id}")
+    @DeleteMapping("/{course_id}")
     public ResponseEntity<?> deleteCourseById(@PathVariable Long course_id) {
         courseService.deleteCourseById(course_id);
         return new ResponseEntity<String>("Course with ID: " + course_id + " is successfully deleted.", HttpStatus.OK);
     }
 
-    @GetMapping("{/all}")
+    @GetMapping("/all")
     public Iterable<Course> getAllCourses() {
         return courseService.findAllCourses();
     }
