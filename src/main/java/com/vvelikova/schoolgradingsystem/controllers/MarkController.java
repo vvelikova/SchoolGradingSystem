@@ -76,8 +76,8 @@ public class MarkController {
             avgForCourse = markService.getAverageGradeOfStudentForCourse(student_id, course_id);
         } catch (StudentNotFoundException ex) {
             throw new StudentNotFoundException(ex.getMessage());
-        } catch (MarkNotFoundExceptoin exc) {
-            throw new MarkNotFoundExceptoin(exc.getMessage());
+        } catch (MarkNotFoundException exc) {
+            throw new MarkNotFoundException(exc.getMessage());
         }
 
 
@@ -102,7 +102,7 @@ public class MarkController {
     }
 
     @ExceptionHandler
-    public ResponseEntity<MarkErrorResponse> handleException(MarkNotFoundExceptoin exc) {
+    public ResponseEntity<MarkErrorResponse> handleException(MarkNotFoundException exc) {
         MarkErrorResponse error = new MarkErrorResponse();
         error.setStatus(HttpStatus.NOT_FOUND.value());
         error.setMessage(exc.getMessage());

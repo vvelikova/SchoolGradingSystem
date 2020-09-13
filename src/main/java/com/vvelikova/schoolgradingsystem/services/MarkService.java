@@ -4,16 +4,13 @@ import com.vvelikova.schoolgradingsystem.domain.Course;
 import com.vvelikova.schoolgradingsystem.domain.Mark;
 import com.vvelikova.schoolgradingsystem.domain.Student;
 import com.vvelikova.schoolgradingsystem.exceptions.CourseNotFoundException;
-import com.vvelikova.schoolgradingsystem.exceptions.MarkNotFoundExceptoin;
+import com.vvelikova.schoolgradingsystem.exceptions.MarkNotFoundException;
 import com.vvelikova.schoolgradingsystem.exceptions.StudentNotFoundException;
-import com.vvelikova.schoolgradingsystem.repositories.CourseRepository;
 import com.vvelikova.schoolgradingsystem.repositories.MarkRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigInteger;
 import java.text.DecimalFormat;
-import java.util.Collection;
 
 @Service
 public class MarkService {
@@ -69,7 +66,7 @@ public class MarkService {
         Mark existingMark = markRepository.getById(markId);
 
         if (existingMark == null) {
-            throw new MarkNotFoundExceptoin("Mark with ID " + markId + " does NOT exist in the system.");
+            throw new MarkNotFoundException("Mark with ID " + markId + " does NOT exist in the system.");
         }
         return existingMark;
 
