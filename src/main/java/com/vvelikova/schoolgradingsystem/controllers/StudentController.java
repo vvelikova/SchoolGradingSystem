@@ -42,7 +42,7 @@ public class StudentController {
         return new ResponseEntity<>(student, HttpStatus.CREATED);
     }
 
-    @GetMapping("{student_id}")
+    @GetMapping("/{student_id}")
     public ResponseEntity<?> getStudentById(@PathVariable Long student_id) {
 
         Student student = studentService.getStudentById(student_id);
@@ -51,14 +51,14 @@ public class StudentController {
 
     }
 
-    @DeleteMapping("{student_id}")
+    @DeleteMapping("/{student_id}")
     public ResponseEntity<?> deleteStudentById(@PathVariable Long student_id) {
         studentService.deleteStudentById(student_id);
 
         return new ResponseEntity<String>("Student with ID: " + student_id + " is successfully deleted.", HttpStatus.OK);
     }
 
-    @GetMapping("{all}")
+    @GetMapping("/all")
     public Iterable<Student> getAllStudents() {
         return studentService.findAllStudents();
     }
