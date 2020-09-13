@@ -15,8 +15,12 @@ public interface MarkRepository extends CrudRepository<Mark, Long> {
     @Override
     Iterable<Mark> findAll();
 
-    @Query(value = "SELECT AVG(Mark.mark) FROM Mark where Mark.student_id = ?1",
+    @Query(value = "SELECT AVG(Mark.mark) FROM Mark where Mark.student_ref = ?1",
             nativeQuery = true)
     Double getAverageGradeOfStudentAcrossCourses(int student_id);
+
+    @Query(value = "SELECT AVG(Mark.mark) FROM Mark where Mark.student_ref = ?1 AND Mark.mark_ref = ?2",
+            nativeQuery = true)
+    Double getAverageGradeOfStudentForCourse(int student_id, int course_id);
 
 }

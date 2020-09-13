@@ -24,11 +24,19 @@ public class Mark {
     @Digits(integer = 1, fraction = 2)
     private float mark;
 
-
     @ManyToOne
-    @JoinColumn(name = "student_id", referencedColumnName = "id")
+    @JoinColumn(name = "student_ref", referencedColumnName = "id")
     @JsonIgnore
     private Student student;
+
+    private String studentName;
+
+    @ManyToOne
+    @JoinColumn(name = "mark_ref", referencedColumnName = "id")
+    @JsonIgnore
+    private Course course;
+
+    private String courseName;
 
     public Mark() {
     }
@@ -73,5 +81,29 @@ public class Mark {
 
     public void setStudent(Student student) {
         this.student = student;
+    }
+
+    public String getStudentName() {
+        return studentName;
+    }
+
+    public void setStudentName(String studentName) {
+        this.studentName = studentName;
+    }
+
+    public String getCourseName() {
+        return courseName;
+    }
+
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
+    }
+
+    public Course getCourse() {
+        return course;
+    }
+
+    public void setCourse(Course course) {
+        this.course = course;
     }
 }
