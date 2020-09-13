@@ -2,6 +2,7 @@ package com.vvelikova.schoolgradingsystem.controllers;
 
 import com.vvelikova.schoolgradingsystem.domain.Mark;
 import com.vvelikova.schoolgradingsystem.exceptions.*;
+import com.vvelikova.schoolgradingsystem.customQueriesReturnObjects.IGroupedAverageResponse;
 import com.vvelikova.schoolgradingsystem.services.MarkService;
 import com.vvelikova.schoolgradingsystem.services.ValidationErrorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.text.DecimalFormat;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/mark")
@@ -87,6 +89,11 @@ public class MarkController {
         double averageGrade = markService.getAverageGradeForAllCoursesForAllStudents();
 
         return new ResponseEntity<String>("The average mark of all students in all courses is " + df.format(averageGrade), HttpStatus.OK);
+    }
+
+    @GetMapping("/averages")
+    public List<IGroupedAverageResponse> getAverages(){
+        return markService.getAllAveragesForAllStudentsPerCOurse();
     }
 
     @DeleteMapping("/{mark_id}")

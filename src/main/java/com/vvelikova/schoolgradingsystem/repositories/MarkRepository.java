@@ -1,6 +1,7 @@
 package com.vvelikova.schoolgradingsystem.repositories;
 
 import com.vvelikova.schoolgradingsystem.domain.Mark;
+import com.vvelikova.schoolgradingsystem.customQueriesReturnObjects.IGroupedAverageResponse;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
@@ -26,5 +27,8 @@ public interface MarkRepository extends CrudRepository<Mark, Long> {
     @Query(value = "SELECT AVG(Mark.mark) FROM Mark",
             nativeQuery = true)
     Double getAverageGradeForAllCoursesForAllStudents();
+
+    @Query(value = "SELECT Mark.student_name AS studentName, Mark.course_name AS courseName, AVG(Mark.mark) AS averageMark FROM Mark GROUP BY Mark.student_ref, Mark.mark_ref", nativeQuery = true)
+    List<IGroupedAverageResponse> averages();
 
 }

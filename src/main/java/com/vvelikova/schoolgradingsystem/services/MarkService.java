@@ -6,11 +6,13 @@ import com.vvelikova.schoolgradingsystem.domain.Student;
 import com.vvelikova.schoolgradingsystem.exceptions.CourseNotFoundException;
 import com.vvelikova.schoolgradingsystem.exceptions.MarkNotFoundException;
 import com.vvelikova.schoolgradingsystem.exceptions.StudentNotFoundException;
+import com.vvelikova.schoolgradingsystem.customQueriesReturnObjects.IGroupedAverageResponse;
 import com.vvelikova.schoolgradingsystem.repositories.MarkRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.DecimalFormat;
+import java.util.List;
 
 @Service
 public class MarkService {
@@ -66,14 +68,20 @@ public class MarkService {
         return markRepository.getAverageGradeForAllCoursesForAllStudents();
     }
 
+    public List<IGroupedAverageResponse> getAllAveragesForAllStudentsPerCOurse() {
+        List<IGroupedAverageResponse> av = markRepository.averages();
+
+        return av;
+    }
+
     public Mark getMarkById(Long markId) {
         Mark existingMark = markRepository.getById(markId);
 
         if (existingMark == null) {
             throw new MarkNotFoundException("Mark with ID " + markId + " does NOT exist in the system.");
         }
-        return existingMark;
 
+        return existingMark;
     }
 
     public void deleteMarkById(Long markId) {
