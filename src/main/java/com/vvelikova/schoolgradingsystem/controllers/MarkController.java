@@ -43,6 +43,11 @@ public class MarkController {
         return new ResponseEntity<>(mark, HttpStatus.CREATED);
     }
 
+    @GetMapping("/all")
+    public Iterable<Mark> getAllMarks() {
+        return markService.findAllMarks();
+    }
+
     @GetMapping("/average/allCourses/{student_id}")
     public ResponseEntity<?> getAverageAcrossAllCourses(@PathVariable Long student_id) {
         DecimalFormat df = new DecimalFormat("#.##");

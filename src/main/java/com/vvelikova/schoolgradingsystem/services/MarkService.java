@@ -26,7 +26,11 @@ public class MarkService {
         theMark.setStudent(theStudent);
 
         return markRepository.save(theMark);
+    }
 
+    public Iterable<Mark> findAllMarks() {
+        Iterable<Mark> allMarks = markRepository.findAll();
+        return allMarks;
     }
 
     public double getAverageGradeOfStudentAcrossCourses(Long studentId) throws StudentNotFoundException {
