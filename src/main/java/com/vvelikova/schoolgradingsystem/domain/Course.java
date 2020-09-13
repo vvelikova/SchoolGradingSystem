@@ -1,10 +1,8 @@
 package com.vvelikova.schoolgradingsystem.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.util.List;
 
 @Entity
 public class Course {
@@ -15,6 +13,10 @@ public class Course {
 
     @NotBlank(message = "The name of the course is required.")
     private String courseName;
+
+    @OneToMany(cascade = {CascadeType.REFRESH, CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE},
+            mappedBy = "course", orphanRemoval = true)
+    public List<Mark> marks;
 
     public Course() {}
 
@@ -32,5 +34,13 @@ public class Course {
 
     public void setCourseName(String courseName) {
         this.courseName = courseName;
+    }
+
+    public List<Mark> getMarks() {
+        return marks;
+    }
+
+    public void setMarks(List<Mark> marks) {
+        this.marks = marks;
     }
 }

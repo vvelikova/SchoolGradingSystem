@@ -1,9 +1,12 @@
 package com.vvelikova.schoolgradingsystem.services;
 
+import com.vvelikova.schoolgradingsystem.domain.Course;
 import com.vvelikova.schoolgradingsystem.domain.Mark;
 import com.vvelikova.schoolgradingsystem.domain.Student;
+import com.vvelikova.schoolgradingsystem.exceptions.CourseNotFoundException;
 import com.vvelikova.schoolgradingsystem.exceptions.MarkNotFoundExceptoin;
 import com.vvelikova.schoolgradingsystem.exceptions.StudentNotFoundException;
+import com.vvelikova.schoolgradingsystem.repositories.CourseRepository;
 import com.vvelikova.schoolgradingsystem.repositories.MarkRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,12 +22,19 @@ public class MarkService {
     private MarkRepository markRepository;
 
     @Autowired
+    private CourseService courseService;
+
+    @Autowired
     private StudentService studentService;
 
-    public Mark addMark(Long studentId, Mark theMark) throws StudentNotFoundException {
+    public Mark addMark(Long studentId, Long courseId, Mark theMark) throws StudentNotFoundException, CourseNotFoundException {
         Student theStudent = studentService.getStudentById(studentId);
+        Course theCourse = courseService.getCourseById(courseId);
 
         theMark.setStudent(theStudent);
+        theMark.setStudentName(theStudent.getStudentName());
+        theMark.setCourse(theCourse);
+        theMark.setCourseName(theCourse.getCourseName());
 
         return markRepository.save(theMark);
     }
@@ -46,7 +56,7 @@ public class MarkService {
     public Mark getMarkById(Long markId) {
         Mark existingMark = markRepository.getById(markId);
 
-        if(existingMark == null ) {
+        if (existingMark == null) {
             throw new MarkNotFoundExceptoin("Mark with ID " + markId + " does NOT exist in the system.");
         }
         return existingMark;

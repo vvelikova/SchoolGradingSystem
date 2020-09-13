@@ -26,8 +26,8 @@ public class MarkController {
     @Autowired
     private ValidationErrorService validationErrorService;
 
-    @PostMapping("/{student_id}")
-    public ResponseEntity<?> addMarkForStudent(@Valid @PathVariable Long student_id,
+    @PostMapping("/{student_id}/{course_id}")
+    public ResponseEntity<?> addMarkForStudent(@Valid @PathVariable Long student_id, @PathVariable Long course_id,
                                                @RequestBody Mark theMark, BindingResult result) {
         ResponseEntity<?> error = validationErrorService.ValidationErrorService(result);
 
@@ -37,7 +37,7 @@ public class MarkController {
 
         Mark mark;
         try {
-            mark = markService.addMark(student_id, theMark);
+            mark = markService.addMark(student_id, course_id, theMark);
         } catch (StudentNotFoundException ex) {
             throw new StudentNotFoundException(ex.getMessage());
         }
