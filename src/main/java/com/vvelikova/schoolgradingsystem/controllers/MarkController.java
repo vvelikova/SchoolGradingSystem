@@ -45,6 +45,12 @@ public class MarkController {
         return new ResponseEntity<>(mark, HttpStatus.CREATED);
     }
 
+    @GetMapping("/{mark_id}")
+    public ResponseEntity<?> getMarkById(@PathVariable Long mark_id) {
+        Mark theMark = markService.getMarkById(mark_id);
+        return new ResponseEntity<>(theMark, HttpStatus.OK);
+    }
+
     @GetMapping("/all")
     public Iterable<Mark> getAllMarks() {
         return markService.findAllMarks();
@@ -83,7 +89,7 @@ public class MarkController {
     }
 
     @ExceptionHandler
-    public ResponseEntity<MarkErrorResponse> handleException (MarkNotFoundExceptoin exc) {
+    public ResponseEntity<MarkErrorResponse> handleException(MarkNotFoundExceptoin exc) {
         MarkErrorResponse error = new MarkErrorResponse();
         error.setStatus(HttpStatus.NOT_FOUND.value());
         error.setMessage(exc.getMessage());
