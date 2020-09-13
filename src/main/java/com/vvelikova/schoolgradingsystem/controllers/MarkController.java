@@ -1,10 +1,7 @@
 package com.vvelikova.schoolgradingsystem.controllers;
 
 import com.vvelikova.schoolgradingsystem.domain.Mark;
-import com.vvelikova.schoolgradingsystem.exceptions.MarkErrorResponse;
-import com.vvelikova.schoolgradingsystem.exceptions.MarkNotFoundExceptoin;
-import com.vvelikova.schoolgradingsystem.exceptions.StudentErrorResponse;
-import com.vvelikova.schoolgradingsystem.exceptions.StudentNotFoundException;
+import com.vvelikova.schoolgradingsystem.exceptions.*;
 import com.vvelikova.schoolgradingsystem.services.MarkService;
 import com.vvelikova.schoolgradingsystem.services.ValidationErrorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,6 +68,22 @@ public class MarkController {
         return new ResponseEntity<String>("Average grade for student with ID " + student_id + " across all courses is " + df.format(avg), HttpStatus.OK);
     }
 
+    @GetMapping("/average/{student_id}/{course_id}")
+    public ResponseEntity<?> getAverageGradeOfStudentForCourse(@PathVariable Long student_id, Long course_id) {
+        DecimalFormat df = new DecimalFormat("#.##");
+        double avgForCourse;
+        try {
+            avgForCourse = markService.getAverageGradeOfStudentForCourse(student_id, course_id);
+        } catch (StudentNotFoundException ex) {
+            throw new StudentNotFoundException(ex.getMessage());
+        } catch (MarkNotFoundExceptoin exc) {
+            throw new MarkNotFoundExceptoin(exc.getMessage());
+        }
+
+
+        return new ResponseEntity<String>("Average grade for student with ID " + student_id + " for course with ID " + course_id + " is " + df.format(avgForCourse), HttpStatus.OK);
+    }
+
     @DeleteMapping("/{mark_id}")
     public ResponseEntity<?> deleteMarkById(@PathVariable Long mark_id) {
         markService.deleteMarkById(mark_id);
@@ -98,5 +111,14 @@ public class MarkController {
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler
+    public ResponseEntity<CourseErrorResponse> handleException(CourseNotFoundException exc) {
+        CourseErrorResponse error = new CourseErrorResponse();
+        error.setStatus(HttpStatus.NOT_FOUND.value());
+        error.setMessage(exc.getMessage());
+        error.setTimestamp(System.currentTimeMillis());
+
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
 
 }

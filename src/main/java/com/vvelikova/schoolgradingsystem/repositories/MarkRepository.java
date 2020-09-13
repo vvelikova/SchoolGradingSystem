@@ -19,4 +19,8 @@ public interface MarkRepository extends CrudRepository<Mark, Long> {
             nativeQuery = true)
     Double getAverageGradeOfStudentAcrossCourses(int student_id);
 
+    @Query(value = "SELECT AVG(Mark.mark) FROM Mark where Mark.student_ref = ?1 AND Mark.mark_ref = ?2",
+            nativeQuery = true)
+    Double getAverageGradeOfStudentForCourse(int student_id, int course_id);
+
 }

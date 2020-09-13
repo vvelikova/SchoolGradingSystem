@@ -53,6 +53,18 @@ public class MarkService {
         return avgGrade;
     }
 
+    public double getAverageGradeOfStudentForCourse(Long studentId, Long courseId) throws StudentNotFoundException, CourseNotFoundException {
+        Student theStudent = studentService.getStudentById(studentId);
+        Course theCourse = courseService.getCourseById(courseId);
+
+        Integer courseIdV = Integer.valueOf(courseId.intValue()); //TODO
+        Integer studentIdV = Integer.valueOf(studentId.intValue()); //TODO
+        DecimalFormat df = new DecimalFormat("#.##");
+        Double avgGradeForParticularCourse = markRepository.getAverageGradeOfStudentForCourse(studentIdV, courseIdV);
+
+        return avgGradeForParticularCourse;
+    }
+
     public Mark getMarkById(Long markId) {
         Mark existingMark = markRepository.getById(markId);
 
