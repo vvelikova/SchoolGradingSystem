@@ -62,6 +62,10 @@ public class MarkService {
         return avgGradeForParticularCourse;
     }
 
+    public double getAverageGradeForAllCoursesForAllStudents() {
+        return markRepository.getAverageGradeForAllCoursesForAllStudents();
+    }
+
     public Mark getMarkById(Long markId) {
         Mark existingMark = markRepository.getById(markId);
 

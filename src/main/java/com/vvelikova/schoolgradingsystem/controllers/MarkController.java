@@ -63,8 +63,6 @@ public class MarkController {
             throw new StudentNotFoundException(ex.getMessage());
         }
 
-        System.out.println("AVERAGE GRADE is " + avg);
-
         return new ResponseEntity<String>("Average grade for student with ID " + student_id + " across all courses is " + df.format(avg), HttpStatus.OK);
     }
 
@@ -80,8 +78,15 @@ public class MarkController {
             throw new MarkNotFoundException(exc.getMessage());
         }
 
-
         return new ResponseEntity<String>("Average grade for student with ID " + student_id + " for course with ID " + course_id + " is " + df.format(avgForCourse), HttpStatus.OK);
+    }
+
+    @GetMapping("/average/allStudents/allCourses")
+    public ResponseEntity<?> getAverageGradeForAllCoursesForAllStudents() {
+        DecimalFormat df = new DecimalFormat("#.##");
+        double averageGrade = markService.getAverageGradeForAllCoursesForAllStudents();
+
+        return new ResponseEntity<String>("The average mark of all students in all courses is " + df.format(averageGrade), HttpStatus.OK);
     }
 
     @DeleteMapping("/{mark_id}")
