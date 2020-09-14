@@ -51,9 +51,6 @@ public class Mark {
         this.mark_date = new Date();
     }
 
-    @PreUpdate
-    protected void onUpdate() {this.mark_date = new Date(); }
-
     public Long getId() {
         return id;
     }
