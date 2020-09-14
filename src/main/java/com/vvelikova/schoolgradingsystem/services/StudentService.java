@@ -23,9 +23,9 @@ public class StudentService {
     @Lazy
     private MarkService markService;
 
-    /** saveUpdateStudent() handles the update ONLY of the name of the student.
-     *  If there is a need for a certain mark to be changed using the methods exposed by the MarkService.
-     *  saveUpdateStudent() handles the update of the linked marks a student has */
+    /** saveUpdateStudent() handles the update ONLY of the name of the Student.
+     *  If there is a need for a certain mark to be changed, the methods exposed by the MarkService should be used.
+     *  saveUpdateStudent() handles the update of the linked marks a Student has */
     public Student saveUpdateStudent(Student theStudent) {
 
         if (theStudent.getId() != null) {
