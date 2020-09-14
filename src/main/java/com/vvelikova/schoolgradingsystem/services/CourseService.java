@@ -4,6 +4,7 @@ import com.vvelikova.schoolgradingsystem.domain.Course;
 import com.vvelikova.schoolgradingsystem.exceptions.CourseNotFoundException;
 import com.vvelikova.schoolgradingsystem.repositories.CourseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -35,7 +36,9 @@ public class CourseService {
         return existingCourse;
     }
 
+    @Async("asyncExecutor")
     public void deleteCourseById(Long id) {
+//        System.out.println("DeleteCourseById on Thread -> " + Thread.currentThread().getName());
         courseRepository.delete(getCourseById(id));
     }
 

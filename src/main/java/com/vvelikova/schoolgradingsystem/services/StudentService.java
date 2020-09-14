@@ -1,10 +1,17 @@
 package com.vvelikova.schoolgradingsystem.services;
 
+import com.vvelikova.schoolgradingsystem.domain.Mark;
 import com.vvelikova.schoolgradingsystem.domain.Student;
 import com.vvelikova.schoolgradingsystem.exceptions.StudentNotFoundException;
 import com.vvelikova.schoolgradingsystem.repositories.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 
 @Service
 public class StudentService {
@@ -12,6 +19,13 @@ public class StudentService {
     @Autowired
     private StudentRepository studentRepository;
 
+    @Autowired
+    @Lazy
+    private MarkService markService;
+
+    /** saveUpdateStudent() handles the update ONLY of the name of the student.
+     *  If there is a need for a certain mark to be changed using the methods exposed by the MarkService.
+     *  saveUpdateStudent() handles the update of the linked marks a student has */
     public Student saveUpdateStudent(Student theStudent) {
 
         if (theStudent.getId() != null) {
@@ -20,6 +34,17 @@ public class StudentService {
             if (existingStudent == null) {
                 throw new StudentNotFoundException("Student with ID: " + theStudent.getId() + " does NOT exist in the system.");
             }
+
+            List<Mark> studentMarks = existingStudent.getMarks();
+            List<Mark> updatedMarkInfo = new ArrayList<>();
+
+            for (Mark obj: studentMarks) {
+                Mark tempMark = markService.getMarkById(obj.getId());
+                tempMark.setStudentName(theStudent.getStudentName());
+                tempMark.setStudent(theStudent);
+                updatedMarkInfo.add(tempMark);
+            }
+            theStudent.setMarks(updatedMarkInfo);
         }
 
         return studentRepository.save(theStudent);
@@ -35,7 +60,10 @@ public class StudentService {
         return existingStudent;
     }
 
+    @Async("asyncExecutor")
     public void deleteStudentById(Long id) {
+//        System.out.println("deleteStudentById on Thread -> " + Thread.currentThread().getName());
+
         studentRepository.delete(getStudentById(id));
     }
 

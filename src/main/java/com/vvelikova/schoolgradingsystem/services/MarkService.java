@@ -9,6 +9,7 @@ import com.vvelikova.schoolgradingsystem.exceptions.StudentNotFoundException;
 import com.vvelikova.schoolgradingsystem.customQueriesReturnObjects.IGroupedAverageResponse;
 import com.vvelikova.schoolgradingsystem.repositories.MarkRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.text.DecimalFormat;
@@ -84,7 +85,10 @@ public class MarkService {
         return existingMark;
     }
 
+    @Async("asyncExecutor")
     public void deleteMarkById(Long markId) {
+//        System.out.println("deleteMarkById on Thread -> " + Thread.currentThread().getName());
+
         markRepository.delete(getMarkById(markId));
     }
 }
