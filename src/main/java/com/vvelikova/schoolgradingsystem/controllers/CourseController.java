@@ -53,7 +53,7 @@ public class CourseController {
     @DeleteMapping("/{course_id}")
     public ResponseEntity<?> deleteCourseById(@PathVariable Long course_id) {
         courseService.deleteCourseById(course_id);
-        return new ResponseEntity<String>("Course with ID: " + course_id + " is successfully deleted.", HttpStatus.OK);
+        return new ResponseEntity<String>("Course with ID: " + course_id + " is successfully deleted. All marks associated with it are also deleted", HttpStatus.OK);
     }
 
     @GetMapping("/all")

@@ -12,6 +12,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Calendar;
+import java.util.concurrent.ExecutionException;
 
 @RestController
 @RequestMapping("/api/student")
@@ -24,7 +26,7 @@ public class StudentController {
     private ValidationErrorService validationErrorService;
 
     @PostMapping("")
-    public ResponseEntity<?> createStudent(@Valid @RequestBody Student theStudent,
+    public ResponseEntity<?> createUpdateStudent(@Valid @RequestBody Student theStudent,
                                            BindingResult result) {
         ResponseEntity<?> error = validationErrorService.ValidationErrorService(result);
 
@@ -54,8 +56,7 @@ public class StudentController {
     @DeleteMapping("/{student_id}")
     public ResponseEntity<?> deleteStudentById(@PathVariable Long student_id) {
         studentService.deleteStudentById(student_id);
-
-        return new ResponseEntity<String>("Student with ID: " + student_id + " is successfully deleted.", HttpStatus.OK);
+        return new ResponseEntity<String>("Student with ID: " + student_id + " is successfully deleted. All marks associated with the student are also deleted.", HttpStatus.OK);
     }
 
     @GetMapping("/all")
