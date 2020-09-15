@@ -40,10 +40,10 @@ public class CSVCourseHelper {
                 course.setCsvId(csvId);
                 course.setFromCSV(true);
 
-                /** if a student with the given name already exists, do NOT create new object.
+                /** if a course with the given name already exists, do NOT create new object.
                  * Name property must be unique */
-                boolean studentNameExists = courses.stream().anyMatch(stu -> csvRecord.get("course_name").equalsIgnoreCase(stu.getCourseName()));
-                if (!studentNameExists) {
+                boolean courseNameExists = courses.stream().anyMatch(stu -> csvRecord.get("course_name").equalsIgnoreCase(stu.getCourseName()));
+                if (!courseNameExists) {
                     courses.add(course);
                 }
             }
