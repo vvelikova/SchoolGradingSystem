@@ -28,7 +28,9 @@ public class StudentService {
      *  saveUpdateStudent() handles the update of the linked marks a Student has */
     public Student saveUpdateStudent(Student theStudent) {
 
-        if (theStudent.getId() != null) {
+        /** Check if the student obj is coming from CSV file and is about to be created.
+             If it is not then make a check if it has an id or not assigned */
+        if (theStudent.getId() != null && !theStudent.isFromCSV()) {
             Student existingStudent = studentRepository.getById(theStudent.getId());
 
             if (existingStudent == null) {

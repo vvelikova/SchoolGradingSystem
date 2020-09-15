@@ -13,11 +13,16 @@ public class Student {
     private Long id;
 
     @NotBlank(message = "The name of the student is required.")
+    @Column(unique = true)
     private String studentName;
 
     @OneToMany(cascade = {CascadeType.REFRESH, CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE},
             mappedBy = "student", orphanRemoval = true)
     private List<Mark> marks;
+
+    private Long csvId = 0L;
+
+    private boolean isFromCSV = false;
 
     public Student() {
     }
@@ -50,6 +55,21 @@ public class Student {
         this.marks = marks;
     }
 
+    public Long getCsvId() {
+        return csvId;
+    }
+
+    public void setCsvId(Long csvId) {
+        this.csvId = csvId;
+    }
+
+    public boolean isFromCSV() {
+        return isFromCSV;
+    }
+
+    public void setFromCSV(boolean fromCSV) {
+        isFromCSV = fromCSV;
+    }
 
     // convenience method for bi-directional relationship
     public void add(Mark tempMark) {

@@ -12,13 +12,22 @@ public class Course {
     private Long id;
 
     @NotBlank(message = "The name of the course is required.")
+    @Column(unique = true)
     private String courseName;
 
     @OneToMany(cascade = {CascadeType.REFRESH, CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE},
             mappedBy = "course", orphanRemoval = true)
     public List<Mark> marks;
 
+    private Long csvId = 0L;
+
+    private boolean isFromCSV = false;
+
     public Course() {}
+
+    public Course (String name) {
+        this.courseName = name;
+    }
 
     public Long getId() {
         return id;
@@ -42,5 +51,21 @@ public class Course {
 
     public void setMarks(List<Mark> marks) {
         this.marks = marks;
+    }
+
+    public Long getCsvId() {
+        return csvId;
+    }
+
+    public void setCsvId(Long csvId) {
+        this.csvId = csvId;
+    }
+
+    public boolean isFromCSV() {
+        return isFromCSV;
+    }
+
+    public void setFromCSV(boolean fromCSV) {
+        isFromCSV = fromCSV;
     }
 }
