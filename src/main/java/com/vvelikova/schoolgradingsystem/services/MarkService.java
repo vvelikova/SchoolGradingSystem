@@ -8,6 +8,7 @@ import com.vvelikova.schoolgradingsystem.exceptions.MarkNotFoundException;
 import com.vvelikova.schoolgradingsystem.exceptions.StudentNotFoundException;
 import com.vvelikova.schoolgradingsystem.customQueriesReturnObjects.IGroupedAverageResponse;
 import com.vvelikova.schoolgradingsystem.repositories.MarkRepository;
+import com.vvelikova.schoolgradingsystem.repositories.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,28 @@ public class MarkService {
     @Autowired
     private StudentService studentService;
 
+    @Autowired
+    private StudentRepository studentRepository;
+
     public Mark addMark(Long studentId, Long courseId, Mark theMark) throws StudentNotFoundException, CourseNotFoundException {
+
+        if(theMark.isFromCSV()) {
+            System.out.println("From addMArk()");
+            Student studentCSV = studentService.findStudentByCsvId(theMark.getCsvStudentId());
+
+            System.out.println(studentCSV.toString());
+            Course courseCSV = courseService.findCourseByCsvId(theMark.getCsvCourseId());
+
+            System.out.println(courseCSV.toString());
+
+            theMark.setStudent(studentCSV);
+            theMark.setStudentName(studentCSV.getStudentName());
+            theMark.setCourse(courseCSV);
+            theMark.setCourseName(courseCSV.getCourseName());
+
+            return markRepository.save(theMark);
+        }
+
         Student theStudent = studentService.getStudentById(studentId);
         Course theCourse = courseService.getCourseById(courseId);
 

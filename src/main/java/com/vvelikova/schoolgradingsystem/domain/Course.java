@@ -68,4 +68,15 @@ public class Course {
     public void setFromCSV(boolean fromCSV) {
         isFromCSV = fromCSV;
     }
+
+    @Override
+    public String toString() {
+        return "Course{" +
+                "id=" + id +
+                ", courseName='" + courseName + '\'' +
+                ", marks=" + marks +
+                ", csvId=" + csvId +
+                ", isFromCSV=" + isFromCSV +
+                '}';
+    }
 }

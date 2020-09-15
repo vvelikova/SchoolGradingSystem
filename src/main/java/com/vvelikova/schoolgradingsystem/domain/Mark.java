@@ -38,11 +38,20 @@ public class Mark {
 
     private String courseName;
 
+    private boolean isFromCSV = false;
+
+    private Long csvStudentId;
+    private Long csvCourseId;
+
     public Mark() {
     }
 
     public Mark(Date mark_date, @DecimalMin(value = "2.00", message = "The lowest grade possible is 2.00") @DecimalMax(value = "6.00", message = "The highest grade possible is 6.00") @Digits(integer = 1, fraction = 2) float mark) {
         this.mark_date = mark_date;
+        this.mark = mark;
+    }
+
+    public Mark(@DecimalMin(value = "2.00", message = "The lowest grade possible is 2.00") @DecimalMax(value = "6.00", message = "The highest grade possible is 6.00") @Digits(integer = 1, fraction = 2) float mark) {
         this.mark = mark;
     }
 
@@ -105,5 +114,29 @@ public class Mark {
 
     public void setCourse(Course course) {
         this.course = course;
+    }
+
+    public boolean isFromCSV() {
+        return isFromCSV;
+    }
+
+    public void setFromCSV(boolean fromCSV) {
+        isFromCSV = fromCSV;
+    }
+
+    public Long getCsvStudentId() {
+        return csvStudentId;
+    }
+
+    public void setCsvStudentId(Long csvStudentId) {
+        this.csvStudentId = csvStudentId;
+    }
+
+    public Long getCsvCourseId() {
+        return csvCourseId;
+    }
+
+    public void setCsvCourseId(Long csvCourseId) {
+        this.csvCourseId = csvCourseId;
     }
 }

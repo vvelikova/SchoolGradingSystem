@@ -80,4 +80,15 @@ public class Student {
         marks.add(tempMark);
         tempMark.setStudent(this);
     }
+
+    @Override
+    public String toString() {
+        return "Student{" +
+                "id=" + id +
+                ", studentName='" + studentName + '\'' +
+                ", marks=" + marks +
+                ", csvId=" + csvId +
+                ", isFromCSV=" + isFromCSV +
+                '}';
+    }
 }

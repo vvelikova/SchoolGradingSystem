@@ -5,6 +5,8 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface CourseRepository extends CrudRepository<Course, Long> {
 
+    Course findByCsvId(Long id);
+
     Course getById(Long id);
 
     @Override

@@ -61,6 +61,16 @@ public class CourseService {
         return existingCourse;
     }
 
+    public Course findCourseByCsvId (Long id) {
+        Course existingCourse = courseRepository.findByCsvId(id);
+
+        if(existingCourse == null ){
+            throw new CourseNotFoundException("Course with ID " + id + " passed in the imported CSV file DOES NOT exists!");
+        }
+
+        return existingCourse;
+    }
+
     @Async("asyncExecutor")
     public void deleteCourseById(Long id) {
 //        System.out.println("DeleteCourseById on Thread -> " + Thread.currentThread().getName());

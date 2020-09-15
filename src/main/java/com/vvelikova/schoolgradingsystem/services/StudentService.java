@@ -49,6 +49,10 @@ public class StudentService {
             theStudent.setMarks(updatedMarkInfo);
         }
 
+        /** In order to be able to update Student objects imported by csv file
+         * should change the value of the property fromCSV to false */
+        theStudent.setFromCSV(false);
+
         return studentRepository.save(theStudent);
     }
 
@@ -57,6 +61,16 @@ public class StudentService {
 
         if (existingStudent == null) {
             throw new StudentNotFoundException("Student with ID " + id + " does NOT exist in the system.");
+        }
+
+        return existingStudent;
+    }
+
+    public Student findStudentByCsvId(Long id) {
+        Student existingStudent = studentRepository.findByCsvId(id);
+
+        if(existingStudent == null ) {
+            throw new StudentNotFoundException("Student with ID " + id+ " passed in the imported CSV file DOES NOT exists!");
         }
 
         return existingStudent;

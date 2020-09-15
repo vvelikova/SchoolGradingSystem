@@ -69,6 +69,27 @@ public class CSVController {
         return new ResponseEntity<>(new CSVResponseMessage(msg), HttpStatus.BAD_REQUEST);
     }
 
+    @PostMapping("/upload/marks")
+    public ResponseEntity<CSVResponseMessage> uploadFileMarks(@RequestParam("file")MultipartFile file) {
+        String msg = "";
+
+        if(CSVCourseHelper.hasCSVFormat(file)) {
+            try {
+                fileService.saveMarks(file);
+
+                msg = "The file was uploaded successfully: " + file.getOriginalFilename();
+                return new ResponseEntity<>(new CSVResponseMessage(msg), HttpStatus.OK);
+            } catch (Exception exc) {
+                System.out.println(exc.getStackTrace());
+                msg = "Could not upload file: " +file.getOriginalFilename() + "!!!";
+                return new ResponseEntity<>(new CSVResponseMessage(msg), HttpStatus.EXPECTATION_FAILED);
+            }
+        }
+
+        msg = "Please upload a CSV file.";
+        return new ResponseEntity<>(new CSVResponseMessage(msg), HttpStatus.BAD_REQUEST);
+    }
+
     @GetMapping("/students")
     public ResponseEntity<?> getAllStudents() {
         try {
