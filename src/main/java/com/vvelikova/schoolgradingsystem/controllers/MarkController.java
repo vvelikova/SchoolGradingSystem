@@ -55,6 +55,7 @@ public class MarkController {
         return markService.findAllMarks();
     }
 
+    /** The average mark a single student has across all courses */
     @GetMapping("/average/allCourses/{student_id}")
     public ResponseEntity<?> getAverageAcrossAllCourses(@PathVariable Long student_id) {
         DecimalFormat df = new DecimalFormat("#.##");
@@ -68,6 +69,7 @@ public class MarkController {
         return new ResponseEntity<String>("Average grade for student with ID " + student_id + " across all courses is " + df.format(avg), HttpStatus.OK);
     }
 
+    /** The average mark a single student has in a single course  */
     @GetMapping("/average/{student_id}/{course_id}")
     public ResponseEntity<?> getAverageGradeOfStudentForCourse(@PathVariable Long student_id, Long course_id) {
         DecimalFormat df = new DecimalFormat("#.##");
@@ -83,6 +85,7 @@ public class MarkController {
         return new ResponseEntity<String>("Average grade for student with ID " + student_id + " for course with ID " + course_id + " is " + df.format(avgForCourse), HttpStatus.OK);
     }
 
+    /** The average mark all students were given in all courses*/
     @GetMapping("/average/allStudents/allCourses")
     public ResponseEntity<?> getAverageGradeForAllCoursesForAllStudents() {
         DecimalFormat df = new DecimalFormat("#.##");
@@ -91,6 +94,7 @@ public class MarkController {
         return new ResponseEntity<String>("The average mark of all students in all courses is " + df.format(averageGrade), HttpStatus.OK);
     }
 
+    /** The average mark for all existing combinations of a student and a course */
     @GetMapping("/averages")
     public List<IGroupedAverageResponse> getAverages(){
         return markService.getAllAveragesForAllStudentsPerCOurse();
@@ -102,35 +106,4 @@ public class MarkController {
 
         return new ResponseEntity<String>("Mark with ID " + mark_id + " is successfully deleted.", HttpStatus.OK);
     }
-
-    @ExceptionHandler
-    public ResponseEntity<StudentErrorResponse> handleException(StudentNotFoundException exc) {
-        StudentErrorResponse error = new StudentErrorResponse();
-        error.setStatus(HttpStatus.NOT_FOUND.value());
-        error.setMessage(exc.getMessage());
-        error.setTimestamp(System.currentTimeMillis());
-
-        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler
-    public ResponseEntity<MarkErrorResponse> handleException(MarkNotFoundException exc) {
-        MarkErrorResponse error = new MarkErrorResponse();
-        error.setStatus(HttpStatus.NOT_FOUND.value());
-        error.setMessage(exc.getMessage());
-        error.setTimestamp(System.currentTimeMillis());
-
-        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler
-    public ResponseEntity<CourseErrorResponse> handleException(CourseNotFoundException exc) {
-        CourseErrorResponse error = new CourseErrorResponse();
-        error.setStatus(HttpStatus.NOT_FOUND.value());
-        error.setMessage(exc.getMessage());
-        error.setTimestamp(System.currentTimeMillis());
-
-        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
-    }
-
 }

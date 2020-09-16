@@ -56,22 +56,13 @@ public class StudentController {
     @DeleteMapping("/{student_id}")
     public ResponseEntity<?> deleteStudentById(@PathVariable Long student_id) {
         studentService.deleteStudentById(student_id);
+
         return new ResponseEntity<String>("Student with ID: " + student_id + " is successfully deleted. All marks associated with the student are also deleted.", HttpStatus.OK);
     }
 
     @GetMapping("/all")
     public Iterable<Student> getAllStudents() {
         return studentService.findAllStudents();
-    }
-
-    @ExceptionHandler
-    public ResponseEntity<StudentErrorResponse> handleException(StudentNotFoundException exc) {
-        StudentErrorResponse error = new StudentErrorResponse();
-        error.setStatus(HttpStatus.NOT_FOUND.value());
-        error.setMessage(exc.getMessage());
-        error.setTimestamp(System.currentTimeMillis());
-
-        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 
 }
