@@ -12,19 +12,18 @@ import java.util.concurrent.Executor;
 @EnableAsync
 public class SchoolGradingSystemApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(SchoolGradingSystemApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(SchoolGradingSystemApplication.class, args);
+    }
 
-	@Bean(name = "asyncExecutor")
-	public Executor asyncExecutor()
-	{
-		ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-		executor.setCorePoolSize(3);
-		executor.setMaxPoolSize(100);
-		executor.setQueueCapacity(100);
-		executor.setThreadNamePrefix("AsynchThread-");
-		executor.initialize();
-		return executor;
-	}
+    @Bean(name = "asyncExecutor")
+    public Executor asyncExecutor() {
+        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        executor.setCorePoolSize(3);
+        executor.setMaxPoolSize(100);
+        executor.setQueueCapacity(100);
+        executor.setThreadNamePrefix("AsynchThread-");
+        executor.initialize();
+        return executor;
+    }
 }
