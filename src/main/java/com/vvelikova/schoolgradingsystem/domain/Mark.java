@@ -55,9 +55,14 @@ public class Mark {
         this.mark = mark;
     }
 
+    /** On creation of a mark, auto-generate the value of mark_date ONLY if the
+     * mark is not coming from CSV file. Marks from CSV file should have their mark_date defined in the
+     *  CSV file that is uploaded. */
     @PrePersist
     protected void onCreate() {
-        this.mark_date = new Date();
+        if(!this.isFromCSV()) {
+            this.mark_date = new Date();
+        }
     }
 
     public Long getId() {
