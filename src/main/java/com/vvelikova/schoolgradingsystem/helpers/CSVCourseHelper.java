@@ -22,11 +22,13 @@ public class CSVCourseHelper {
         return true;
     }
 
-    // read InputStream of a file, return a list of Students
+    /**
+     * Read InputStream of a file, return a list of Students
+     */
     public static List<Course> csvToCourses(InputStream is) {
         try (BufferedReader fileReader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
              CSVParser csvParser = new CSVParser(fileReader,
-                     CSVFormat.DEFAULT.withHeader("first_col","student_id","student_name","course_id","course_name","mark_id","mark","mark_date")
+                     CSVFormat.DEFAULT.withHeader("first_col", "student_id", "student_name", "course_id", "course_name", "mark_id", "mark", "mark_date")
                              .withIgnoreHeaderCase().withTrim())) {
 
             List<Course> courses = new ArrayList<Course>();
@@ -40,37 +42,18 @@ public class CSVCourseHelper {
                 course.setCsvId(csvId);
                 course.setFromCSV(true);
 
-                /** if a course with the given name already exists, do NOT create new object.
-                 * Name property must be unique */
+                /** If a course with the given name already exists, do NOT create new object.
+                 * Name property must be unique for each Course */
                 boolean courseNameExists = courses.stream().anyMatch(stu -> csvRecord.get("course_name").equalsIgnoreCase(stu.getCourseName()));
                 if (!courseNameExists) {
                     courses.add(course);
                 }
             }
 
-            System.out.println("Student List size: " + courses.size());
-
             return courses;
+
         } catch (IOException e) {
             throw new RuntimeException("Fail to parse CSV file: " + e.getMessage());
-        }
-    }
-
-    public static ByteArrayInputStream studentsToCSV(List<Student> students) {
-        final CSVFormat format = CSVFormat.DEFAULT.withQuoteMode(QuoteMode.MINIMAL);
-
-        try (ByteArrayOutputStream out = new ByteArrayOutputStream();
-             CSVPrinter csvPrinter = new CSVPrinter(new PrintWriter(out), format);) {
-            for (Student student : students) {
-                List<String> data = Arrays.asList(student.getStudentName());
-
-                csvPrinter.printRecord(data);
-            }
-
-            csvPrinter.flush();
-            return new ByteArrayInputStream(out.toByteArray());
-        } catch (IOException e) {
-            throw new RuntimeException("fail to import data to CSV file: " + e.getMessage());
         }
     }
 }

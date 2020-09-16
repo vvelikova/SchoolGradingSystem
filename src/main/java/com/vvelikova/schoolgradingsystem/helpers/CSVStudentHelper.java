@@ -11,7 +11,6 @@ import java.util.List;
 
 public class CSVStudentHelper {
     public static String TYPE = "text/csv";
-//    static String[] HEADERs = {"student_id", "student_name"};
 
     public static boolean hasCSVFormat(MultipartFile file) {
         if (!TYPE.equalsIgnoreCase(file.getContentType())) {
@@ -32,7 +31,6 @@ public class CSVStudentHelper {
 
             Iterable<CSVRecord> csvRecords = csvParser.getRecords();
 
-            int count = 1;
             for (CSVRecord csvRecord : csvRecords) {
                 Long csvId = Long.parseLong(csvRecord.get("student_id"));
 
@@ -40,16 +38,14 @@ public class CSVStudentHelper {
                 student.setCsvId(csvId);
                 student.setFromCSV(true);
 
-                /** if a student with the given name already exists, do NOT create new object.
-                 * Name property must be unique */
+                /** If a student with the given name already exists, do NOT create new object.
+                 * Name property must be unique for each student */
                 boolean studentNameExists = students.stream().anyMatch(stu -> csvRecord.get("student_name").equalsIgnoreCase(stu.getStudentName()));
                 if (!studentNameExists) {
                     students.add(student);
                 }
 
             }
-
-            System.out.println("Student List size: " + students.size());
 
             return students;
         } catch (IOException e) {
