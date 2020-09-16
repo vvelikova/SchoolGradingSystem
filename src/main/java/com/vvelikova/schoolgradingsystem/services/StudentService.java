@@ -10,7 +10,6 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 @Service
@@ -23,13 +22,15 @@ public class StudentService {
     @Lazy
     private MarkService markService;
 
-    /** saveUpdateStudent() handles the update ONLY of the name of the Student.
-     *  If there is a need for a certain mark to be changed, the methods exposed by the MarkService should be used.
-     *  saveUpdateStudent() handles the update of the linked marks a Student has */
+    /**
+     * saveUpdateStudent() handles the update ONLY of the name of the Student.
+     * If there is a need for a certain mark to be changed, the methods exposed by the MarkService should be used.
+     * saveUpdateStudent() handles the update of the linked marks a Student has
+     */
     public Student saveUpdateStudent(Student theStudent) {
 
         /** Check if the student obj is coming from CSV file and is about to be created.
-             If it is not then make a check if it has an id or not assigned */
+         If it is not then make a check if it has an id or not assigned */
         if (theStudent.getId() != null && !theStudent.isFromCSV()) {
             Student existingStudent = studentRepository.getById(theStudent.getId());
 
@@ -40,7 +41,7 @@ public class StudentService {
             List<Mark> studentMarks = existingStudent.getMarks();
             List<Mark> updatedMarkInfo = new ArrayList<>();
 
-            for (Mark obj: studentMarks) {
+            for (Mark obj : studentMarks) {
                 Mark tempMark = markService.getMarkById(obj.getId());
                 tempMark.setStudentName(theStudent.getStudentName());
                 tempMark.setStudent(theStudent);
@@ -49,7 +50,14 @@ public class StudentService {
             theStudent.setMarks(updatedMarkInfo);
         }
 
-        /** In order to be able to update Student objects imported by csv file
+        /** If updating an existing student, take care of persisting old info about student's csvID.
+         * In case the Student was created using CSV file, the student's csvId holds highly important role in mapping marks to students */
+        if (theStudent.getId() != null) {
+            Student oldObj = studentRepository.getById(theStudent.getId());
+            theStudent.setCsvId(oldObj.getCsvId());
+        }
+
+        /** In order further on to be able to update Student objects, imported by csv file,
          * should change the value of the property fromCSV to false */
         theStudent.setFromCSV(false);
 
@@ -69,8 +77,8 @@ public class StudentService {
     public Student findStudentByCsvId(Long id) {
         Student existingStudent = studentRepository.findByCsvId(id);
 
-        if(existingStudent == null ) {
-            throw new StudentNotFoundException("Student with ID " + id+ " passed in the imported CSV file DOES NOT exists!");
+        if (existingStudent == null) {
+            throw new StudentNotFoundException("Student with ID " + id + " passed in the imported CSV file DOES NOT exists!");
         }
 
         return existingStudent;

@@ -14,6 +14,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -31,27 +32,57 @@ public class MarkService {
     @Autowired
     private StudentRepository studentRepository;
 
-    public Mark addMark(Long studentId, Long courseId, Mark theMark) throws StudentNotFoundException, CourseNotFoundException {
+    public List<Mark> createMarkObjectsFromCSV(List<Mark> marksInfoCSV) {
 
-        if(theMark.isFromCSV()) {
-            System.out.println("From addMArk()");
+        List<Mark> validMarkObjects = new ArrayList<>();
+
+        for (Mark mark : marksInfoCSV) {
+            Mark tempMark = new Mark();
+            Student studentCSV = studentService.findStudentByCsvId(mark.getCsvStudentId());
+            Course courseCSV = courseService.findCourseByCsvId(mark.getCsvCourseId());
+
+            tempMark.setStudent(studentCSV);
+            tempMark.setStudentName(studentCSV.getStudentName());
+            tempMark.setCourse(courseCSV);
+            tempMark.setCourseName(courseCSV.getCourseName());
+
+            validMarkObjects.add(tempMark);
+        }
+
+        return validMarkObjects;
+    }
+
+    public Mark addMark(Long studentId, Long courseId, Mark theMark) throws StudentNotFoundException, CourseNotFoundException {
+        System.out.println("In addMarks");
+        System.out.println("is from csv check " + theMark.getMark());
+        if (theMark.isFromCSV()) {
+            System.out.println("From addMArk() isFromCSV");
             Student studentCSV = studentService.findStudentByCsvId(theMark.getCsvStudentId());
 
-            System.out.println(studentCSV.toString());
             Course courseCSV = courseService.findCourseByCsvId(theMark.getCsvCourseId());
-
-            System.out.println(courseCSV.toString());
 
             theMark.setStudent(studentCSV);
             theMark.setStudentName(studentCSV.getStudentName());
             theMark.setCourse(courseCSV);
             theMark.setCourseName(courseCSV.getCourseName());
 
+            System.out.println("just before saving");
+
             return markRepository.save(theMark);
+        }
+
+        if (theMark.getId() != null) {
+            Mark oldMarkObj = markRepository.getById(theMark.getId());
+            if (oldMarkObj.getCsvStudentId() != null) {
+                theMark.setCsvCourseId(oldMarkObj.getCsvCourseId());
+                theMark.setCsvStudentId(oldMarkObj.getCsvStudentId());
+            }
+            theMark.setMark_date(oldMarkObj.getMark_date());
         }
 
         Student theStudent = studentService.getStudentById(studentId);
         Course theCourse = courseService.getCourseById(courseId);
+
 
         theMark.setStudent(theStudent);
         theMark.setStudentName(theStudent.getStudentName());
@@ -67,21 +98,21 @@ public class MarkService {
     }
 
     public double getAverageGradeOfStudentAcrossCourses(Long studentId) throws StudentNotFoundException {
-        Student theStudent = studentService.getStudentById(studentId);
+        studentService.getStudentById(studentId);
         Integer studentIdV = Integer.valueOf(studentId.intValue());
-        DecimalFormat df = new DecimalFormat("#.##");
+//        DecimalFormat df = new DecimalFormat("#.##");
         Double avgGrade = markRepository.getAverageGradeOfStudentAcrossCourses(studentIdV);
-        System.out.println(avgGrade);
+
         return avgGrade;
     }
 
     public double getAverageGradeOfStudentForCourse(Long studentId, Long courseId) throws StudentNotFoundException, CourseNotFoundException {
-        Student theStudent = studentService.getStudentById(studentId);
-        Course theCourse = courseService.getCourseById(courseId);
+        studentService.getStudentById(studentId);
+        courseService.getCourseById(courseId);
 
         Integer courseIdV = Integer.valueOf(courseId.intValue()); //TODO
         Integer studentIdV = Integer.valueOf(studentId.intValue()); //TODO
-        DecimalFormat df = new DecimalFormat("#.##");
+//        DecimalFormat df = new DecimalFormat("#.##");
         Double avgGradeForParticularCourse = markRepository.getAverageGradeOfStudentForCourse(studentIdV, courseIdV);
 
         return avgGradeForParticularCourse;

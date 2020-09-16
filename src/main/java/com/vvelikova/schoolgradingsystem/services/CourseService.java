@@ -23,9 +23,11 @@ public class CourseService {
     @Lazy
     private MarkService markService;
 
-    /** saveUpdateCourse() handles the update ONLY of the name of the Course.
-     *  If there is a need for a certain mark to be changed, the methods exposed by the MarkService should be used.
-     *  saveUpdateCourse() handles the update of the linked marks a Course has */
+    /**
+     * saveUpdateCourse() handles the update ONLY of the name of the Course.
+     * If there is a need for a certain mark to be changed, the methods exposed by the MarkService should be used.
+     * saveUpdateCourse() handles the cascade update of the linked marks a Course has
+     */
     public Course saveUpdateCourse(Course theCourse) {
 
         if (theCourse.getId() != null) {
@@ -38,7 +40,9 @@ public class CourseService {
             List<Mark> courseMarks = existingCourse.getMarks();
             List<Mark> updatedMarkInfo = new ArrayList<>();
 
-            for (Mark obj: courseMarks) {
+            theCourse.setCsvId(existingCourse.getCsvId());
+
+            for (Mark obj : courseMarks) {
                 Mark tempMark = markService.getMarkById(obj.getId());
                 tempMark.setCourseName(theCourse.getCourseName());
                 tempMark.setCourse(theCourse);
@@ -61,10 +65,10 @@ public class CourseService {
         return existingCourse;
     }
 
-    public Course findCourseByCsvId (Long id) {
+    public Course findCourseByCsvId(Long id) {
         Course existingCourse = courseRepository.findByCsvId(id);
 
-        if(existingCourse == null ){
+        if (existingCourse == null) {
             throw new CourseNotFoundException("Course with ID " + id + " passed in the imported CSV file DOES NOT exists!");
         }
 
