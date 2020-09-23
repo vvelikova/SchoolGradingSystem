@@ -20,9 +20,10 @@ public class Student {
             mappedBy = "student", orphanRemoval = true)
     private List<Mark> marks;
 
+    @Column(unique = true)
     private Long csvId = 0L;
 
-    private boolean isFromCSV = false;
+    private boolean fromCSV = false;
 
     public Student() {
     }
@@ -63,12 +64,12 @@ public class Student {
         this.csvId = csvId;
     }
 
-    public boolean isFromCSV() {
-        return isFromCSV;
+    public boolean getFromCSV() {
+        return fromCSV;
     }
 
     public void setFromCSV(boolean fromCSV) {
-        isFromCSV = fromCSV;
+        this.fromCSV = fromCSV;
     }
 
     // convenience method for bi-directional relationship
@@ -88,7 +89,31 @@ public class Student {
                 ", studentName='" + studentName + '\'' +
                 ", marks=" + marks +
                 ", csvId=" + csvId +
-                ", isFromCSV=" + isFromCSV +
+                ", isFromCSV=" + fromCSV +
                 '}';
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == null) {
+            return false;
+        }
+
+        else if (obj.getClass() != this.getClass()){
+            return false;
+        }
+
+        final Student other = (Student) obj;
+
+        if ((this.studentName == null) ? (other.studentName != null) : !this.studentName.equals((other.studentName))) {
+            return false;
+        }
+
+        return true;
     }
 }

@@ -21,7 +21,7 @@ public class Course {
 
     private Long csvId = 0L;
 
-    private boolean isFromCSV = false;
+    private boolean fromCSV = false;
 
     public Course() {}
 
@@ -62,11 +62,11 @@ public class Course {
     }
 
     public boolean isFromCSV() {
-        return isFromCSV;
+        return fromCSV;
     }
 
     public void setFromCSV(boolean fromCSV) {
-        isFromCSV = fromCSV;
+        fromCSV = fromCSV;
     }
 
     @Override
@@ -76,7 +76,32 @@ public class Course {
                 ", courseName='" + courseName + '\'' +
                 ", marks=" + marks +
                 ", csvId=" + csvId +
-                ", isFromCSV=" + isFromCSV +
+                ", isFromCSV=" + fromCSV +
                 '}';
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+
+        if(obj == null) {
+            return false;
+        }
+
+        else if (obj.getClass() != this.getClass()){
+            return false;
+        }
+
+        final Course other = (Course) obj;
+
+        if ((this.courseName == null) ? (other.courseName != null) : !this.courseName.equals((other.courseName))) {
+            return false;
+        }
+
+        return true;
     }
 }
